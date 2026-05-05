@@ -38,6 +38,13 @@ def load_data():
 
 df_day = load_data()
 
+# Helper function untuk format bar labels dengan handling NaN
+def format_bar_label(height):
+    """Convert height to string, handling NaN values"""
+    if pd.isna(height):
+        return ''
+    return f'{int(height)}'
+
 # Styling
 st.markdown("""
 <style>
@@ -94,7 +101,7 @@ with tab1:
     with col1:
         # Season bar chart
         season_order = ['Spring', 'Summer', 'Fall', 'Winter']
-        season_data = df_day.groupby('season_name')[['casual', 'registered']].mean().reindex(season_order)
+        season_data = df_day.groupby('season_name')[['casual', 'registered']].mean().reindex(season_order).fillna(0)
         
         fig, ax = plt.subplots(figsize=(10, 6))
         x = np.arange(len(season_order))
@@ -114,7 +121,7 @@ with tab1:
             for bar in bars:
                 height = bar.get_height()
                 ax.text(bar.get_x() + bar.get_width()/2., height,
-                       f'{int(height)}', ha='center', va='bottom', fontsize=9)
+                       format_bar_label(height), ha='center', va='bottom', fontsize=9)
         
         st.pyplot(fig, use_container_width=True)
     
@@ -161,7 +168,7 @@ with tab2:
             for bar in bars:
                 height = bar.get_height()
                 ax.text(bar.get_x() + bar.get_width()/2., height,
-                       f'{int(height)}', ha='center', va='bottom', fontsize=9)
+                       format_bar_label(height), ha='center', va='bottom', fontsize=9)
         
         st.pyplot(fig, use_container_width=True)
     
@@ -182,7 +189,7 @@ with tab2:
         for bar in bars:
             height = bar.get_height()
             ax.text(bar.get_x() + bar.get_width()/2., height,
-                   f'{int(height)}', ha='center', va='bottom', fontsize=9)
+                   format_bar_label(height), ha='center', va='bottom', fontsize=9)
         
         st.pyplot(fig, use_container_width=True)
 
@@ -195,7 +202,7 @@ with tab3:
         # Weather analysis
         weather_order = ['Clear', 'Mist', 'Light Snow/Rain', 'Heavy Rain']
         weather_data = df_day.groupby('weather_name')[['casual', 'registered', 'cnt']].mean()
-        weather_data = weather_data.reindex(weather_order)
+        weather_data = weather_data.reindex(weather_order).fillna(0)
         
         fig, ax = plt.subplots(figsize=(10, 6))
         colors = ['#95E1D3', '#F38181', '#AA96DA', '#FCBAD3']
@@ -209,7 +216,7 @@ with tab3:
         for bar in bars:
             height = bar.get_height()
             ax.text(bar.get_x() + bar.get_width()/2., height,
-                   f'{int(height)}', ha='center', va='bottom', fontsize=9)
+                   format_bar_label(height), ha='center', va='bottom', fontsize=9)
         
         st.pyplot(fig, use_container_width=True)
     
@@ -297,6 +304,6 @@ st.markdown("---")
 st.markdown("""
 <div style='text-align: center; color: #666; font-size: 12px;'>
     📊 Data Analysis | 2011-2012 Washington D.C. Bike Sharing Data<br>
-    Generated with Streamlit | Last Updated: 2024
+    Generated with Streamlit | Last Updated: 2026
 </div>
 """, unsafe_allow_html=True)
