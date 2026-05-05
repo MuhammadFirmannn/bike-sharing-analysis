@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from datetime import datetime, timedelta
+import os
 
 # Set page config
 st.set_page_config(page_title="Bike Sharing Analysis Dashboard", page_icon="🚴", layout="wide")
@@ -11,7 +12,10 @@ st.set_page_config(page_title="Bike Sharing Analysis Dashboard", page_icon="🚴
 # Load data
 @st.cache_data
 def load_data():
-    df_day = pd.read_csv('main_data.csv')
+    # Get the directory of the current script
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    csv_path = os.path.join(current_dir, 'main_data.csv')
+    df_day = pd.read_csv(csv_path)
     df_day['dteday'] = pd.to_datetime(df_day['dteday'])
     
     # Create mappings
